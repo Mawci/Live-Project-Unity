@@ -18,11 +18,11 @@ Below are descriptions of the stories I worked on, along with code snippets and 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/loadScreen-ezgif.com-video-to-gif-converter.gif)
 
 
-## Player Movement
+### Player Movement
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif)
 
-## Player Projectiles 
+### Player Projectiles 
 
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
@@ -63,15 +63,15 @@ private void OnCollisionEnter2D(Collision2D collision)
     }
 ```
 
-## Player Death
+### Player Death
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerDeath-video-to-gif-converter.gif)
 
-## Level Logic
+### Level Logic
 //talk about faster enemies
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
 
-## New Level
+### New Level
 //new wave
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/newWaveSpawn.gif)
 
@@ -99,7 +99,7 @@ public void ResetHealth()
 ```
 
 
-## Game Over
+### Game Over
 //with persistent data
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/gameOver.gif)
