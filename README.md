@@ -10,9 +10,9 @@ Below are descriptions of the stories I worked on, along with code snippets and 
  * [Player Movement](#player-movement)
  * [Player Projectiles](#player-projectiles)
  * [Player Death](#player-death)
- * [Level Logic](level-logic)
- * [New Level](new-level)
- * [Game Over](game-over)
+ * [Level Logic](#level-logic)
+ * [New Level](#new-level)
+ * [Game Over](#game-over)
 
 ### Game Scenes
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/loadScreen-ezgif.com-video-to-gif-converter.gif)
