@@ -11,7 +11,7 @@ Below are descriptions of the stories I worked on, along with code snippets and 
  * [Player Abilites](#player-abilities)
  * [Environment](#environment)
  * [Enemies](#enemies)
- * [Animations]()
+ * [Animations](#animations)
  * [Player Death](#player-death)
  * [New Level](#new-level)
  * [Game Over](#game-over)
@@ -143,7 +143,7 @@ Below is the newly editted collision matrix that I was permitted to make additio
 </p>
 
 Jump to see how smoothly the gameObject collisions went in the [enemy story]()
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
+
 
 ```c#
 
@@ -184,11 +184,11 @@ private void OnCollisionEnter2D(Collision2D collision)
 
 ### Environment
 
-#### Background
-&emsp;In this story I added two main features for the environment. The first was a background that scrolls to make it look like the player is moving through space. This is considered a parallax background where stacked images seem to “scroll endlessly” in the background. Through researching how this effect is achieved, I was able to write a script that takes a sprite image, moves it slowly, and resets the position every time it reaches a certain distance. By cleverly tracking its position and resetting it when it is divisible by its tiled height, the player doesn’t notice when the background image has reset.
+<!--### <p align="center">1.)Background</p>-->
+&emsp;In this story I began by implementing a background that scrolls to make it look like the player is moving through space. This is considered a parallax background where stacked images seem to “scroll endlessly” in the background. Through researching how this effect is achieved, I was able to write a script that takes a sprite image, moves it slowly, and resets the position every time it reaches a certain distance. By cleverly tracking its position and resetting it when it is divisible by its tiled height, the player doesn’t notice when the background image has reset.
 
 
-First I cached the reference to the sprite and calculated the amount of pixel in one unit of the sprite as seen below.
+First I cached the reference to the sprite and calculated the amount of pixels in one unit of the sprite's height as seen below.
 
 ```c#
 private void SetupTexture()
@@ -222,16 +222,29 @@ private void CheckReset()
 
 The reset you see above is actually the video recording reset! The reset of the background happens here without you noticing. Try [playing the game](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone) and see how seamless it is. 
 
-#### Shields
+<!--### <p align="center">2.)Shields</p>-->
 The second feature I added was the shield to the environment.
+
+##
+
+### Enemies
+//talk about faster enemies
+![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
+
+![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
+
+##
+
+### Animations
+
+##
 
 ### Player Death
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerDeath-video-to-gif-converter.gif)
 
-### Enemies
-//talk about faster enemies
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
+
+##
 
 ### New Level
 //new wave
@@ -260,6 +273,7 @@ public void ResetHealth()
     }
 ```
 
+##
 
 ### Game Over
 //with persistent data
