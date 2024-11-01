@@ -8,9 +8,11 @@ Below are descriptions of the stories I worked on, along with code snippets and 
 ## User Stories
  * [Game Scenes](#game-scenes)
  * [Player Movement](#player-movement)
- * [Player Projectiles](#player-projectiles)
+ * [Player Abilites](#player-projectiles)
+ * [Environment]()
+ * [Enemies](#enemies)
+ * [Animations]()
  * [Player Death](#player-death)
- * [Level Logic](#level-logic)
  * [New Level](#new-level)
  * [Game Over](#game-over)
  * [Skills](#other-skills-learned)
@@ -56,8 +58,42 @@ public class MenuScript : MonoBehaviour
 ##
 
 ### Player Movement
+<br/>
+&emsp;This story was seemingly simple as the movement in Space Invaders is not too complex, however I still ran into a bug that I needed to carefully step through. Initially, I used transform.Translate() to move the player using its horizontal vector multipied by a constant speed. This worked, but I needed a way to ensure the player stayed within the viewable bounds of the screen. To solve this, I created two variables that would hold the maximum position on the right and left sides of the screen before going out of view. Then I did a simple check to see if the player was within those two values. If they were, then allow input to move the player.
+<br/> <br/>
 
+```c#
+if(transform.position.x >= maxLeft && transform.position.x <= maxRight)
+{
+     float translation = Input.GetAxis("Horizontal") * playerStats.shipSpeed;
+     translation *= Time.deltaTime;
+     transform.Translate(translation, 0, 0);
+}
+```
+#### Movement Bug
+&emsp;Through playtesting, I discovered that this wouldn’t always work. Since I was using transform.Translate() to move, the player would sometimes move faster than the check to see if it was within the bounds. Therefore, it would go past the boundary to then be perpetually stuck and no longer able to register input. To solve this bug I added two additional checks after the player movement to see if the player was outside the bounds. If they were outside the bounds, (which would mean they can never move again) then reset the player position back to the maximum right/left position. This way, if a player managed to go past the edge, the next line of code would quickly reposition them so that the next Update function call (checking if the player position is valid) would return true, allowing the player to move again.
+
+```c#
+if(transform.position.x < maxLeft)
+{
+    transform.position = new Vector2(maxLeft, transform.position.y);
+}
+
+if (transform.position.x > maxRight)
+{
+    transform.position = new Vector2(maxRight, transform.position.y);
+}
+```
+With the addition of the two lines of code above, the player now gets instantly micro-adjusted to be within the screen bounds. As you can see below, seemlessly resulting in an "invisible barrier" feel.
+
+<p align=center>
+<img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif" />
+</p>
+<!--
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif)
+-->
+
+##
 
 ### Player Projectiles 
 
@@ -104,7 +140,7 @@ private void OnCollisionEnter2D(Collision2D collision)
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerDeath-video-to-gif-converter.gif)
 
-### Level Logic
+### Enemies
 //talk about faster enemies
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
 
@@ -144,7 +180,7 @@ public void ResetHealth()
 
 ## Other Skills Learned
 
-* Gained practical experience working as part of a team in a Scrum environment by attending daily stand-ups, sprint planning, and sprint retrospective meetings.
+* Gained practical experience working as part of a team in a Scrum environment by attending daily , sprint planning, sprint retrospective, and daily stand-up meetings.
 * Proven ability to integrate smoothly into ongoing development by adapting to custom naming conventions and workflows for checking out stories and creating pull requests in Azure DevOps.
 * Experience with seeing problems before they arise and communicating them to the project manager immediately that resulted with no downtime to other developers or merge conflicts to the master branch.
 * Communication with team members and assisting in problem solving. During a standup meeting I heard a fellow developer was having difficulty with the detection of 2D collisions and I was able to offer constructive solutions for troubleshooting.
