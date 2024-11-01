@@ -97,6 +97,28 @@ With the addition of the two lines of code above, the player now gets instantly 
 
 ### Player Abilities
 
+<br/>
+&emsp;For this story I was tasked with completing the abilities for the player. Seemingly simple as the player only has the “shoot” ability, I learned just how tedious it needed to be to fully encompass an original Space Invader clone. Initially, I worked with the player controller to register input appropriately. Then made the player projectile by combining Unity’s sprite renderer component, 2DBoxCollider, 2DRigidBody, with a custom movement script that gives constant speed in the y axis.
+
+#### Bullet Spamming Bug
+This worked and allowed the player to shoot projectiles. However, it introduced an unintended feature. The player could hit the spacebar as fast as they wanted to shoot rapidly. Part of the difficulty in Space Invaders is the rate of fire and the necessity to plan your shots as the enemies dwindle. To prevent the player from spamming, I implemented a coroutine that would call the shoot function. The time passed into WaitForSeconds() would simulate the fire rate with a simple boolean flag to check if the coroutine is active or not. In the code below, it is the isShooting variable
+
+```c#
+
+if (Input.GetKeyDown(KeyCode.Space) && !isShooting)
+{
+    StartCoroutine(Shoot());
+}
+
+private IEnumerator Shoot()
+{
+    isShooting = true;
+    Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+    yield return new WaitForSeconds(playerStats.fireRate);
+    isShooting = false;
+}
+```
+If isShooting is true, don’t allow the player to shoot another projectile. Only when isShooting is false can the player shoot a projectile. 
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
 
