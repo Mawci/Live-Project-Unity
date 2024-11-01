@@ -93,6 +93,8 @@ With the addition of the two lines of code above, the player now gets instantly 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif)
 -->
 
+*Jump to: [top](#live-project)*
+
 ##
 
 ### Player Abilities
@@ -224,6 +226,7 @@ The reset you see above is actually the video recording reset! The reset of the 
 
 <!--### <p align="center">2.)Shields</p>-->
 The second feature I added was the shield to the environment.
+*Jump to: [top](#live-project)*
 
 ##
 
@@ -233,16 +236,20 @@ The second feature I added was the shield to the environment.
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
 
+*Jump to: [top](#live-project)*
+
 ##
 
 ### Animations
+
+*Jump to: [top](#live-project)*
 
 ##
 
 ### Player Death
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerDeath-video-to-gif-converter.gif)
-
+*Jump to: [top](#live-project)*
 
 ##
 
@@ -285,7 +292,12 @@ public void ResetHealth()
 
 * Gained practical experience working as part of a team in a Scrum environment by attending daily , sprint planning, sprint retrospective, and daily stand-up meetings.
 * Proven ability to integrate smoothly into ongoing development by adapting to custom naming conventions and workflows for checking out stories and creating pull requests in Azure DevOps.
-* Experience with seeing problems before they arise and communicating them to the project manager immediately that resulted with no downtime to other developers or merge conflicts to the master branch.
+* Experience with seeing problems before they arise and [communicating](#communicating-early) them to the project manager immediately that resulted with no downtime to other developers or merge conflicts to the master branch.
 * Communication with team members and assisting in problem solving. During a standup meeting I heard a fellow developer was having difficulty with the detection of 2D collisions and I was able to offer constructive solutions for troubleshooting.
-* Ability to research and learn material that I am unfamiliar with. Several examples throughout this project where I needed to reference the Unity documentation to successfully implement features. (Animation events) (New Text Assets)
+* Ability to research and learn material that I am unfamiliar with. Several examples throughout this project where I needed to reference the Unity documentation to successfully implement features.
+  * (Animation events)
+  * New [Font Assets](#game-scenes)
+  * [Parallax Background](#environment)
 * Experience with encountering errors / bugs and stepping through them to discover the issue. Then creatively thinking through solutions to implement fixes.
+
+*Jump to: [top](#live-project)*
