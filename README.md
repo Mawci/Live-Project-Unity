@@ -19,7 +19,7 @@ Below are descriptions of the stories I worked on, along with code snippets and 
 ##
 
 ### Game Scenes
-<br/>
+
 
 &emsp; In this story I was responsible for creating a menu scene, game scene, and game-over scene. I worked with Unity’s UI elements to design a menu with buttons and custom font to more accurately represent the Space Invader theme. I referred to the Unity documentation and uploaded a new font to the project. From there, I was able to convert it to a new font asset that could be used as a Text Mesh Pro object.  
     
@@ -58,7 +58,7 @@ public class MenuScript : MonoBehaviour
 ##
 
 ### Player Movement
-<br/>
+
 &emsp;This story was seemingly simple as the movement in Space Invaders is not too complex, however I still ran into a bug that I needed to carefully step through. Initially, I used transform.Translate() to move the player using its horizontal vector multipied by a constant speed. This worked, but I needed a way to ensure the player stayed within the viewable bounds of the screen. To solve this, I created two variables that would hold the maximum position on the right and left sides of the screen before going out of view. Then I did a simple check to see if the player was within those two values. If they were, then allow input to move the player.
 <br/> <br/>
 
@@ -97,19 +97,26 @@ With the addition of the two lines of code above, the player now gets instantly 
 
 ### Player Abilities
 
+
+&emsp;For this story I was tasked with completing the abilities for the player. Seemingly simple as the player only has the “shoot” ability, I learned just how tedious it needed to be to fully encompass an original Space Invader clone. Initially, I worked with the player controller script to register input appropriately. Then made the player projectile by combining Unity’s sprite renderer component, 2DBoxCollider, 2DRigidBody, with a custom movement script that gives constant speed in the y axis.
 <br/>
-&emsp;For this story I was tasked with completing the abilities for the player. Seemingly simple as the player only has the “shoot” ability, I learned just how tedious it needed to be to fully encompass an original Space Invader clone. Initially, I worked with the player controller to register input appropriately. Then made the player projectile by combining Unity’s sprite renderer component, 2DBoxCollider, 2DRigidBody, with a custom movement script that gives constant speed in the y axis.
+<br/>
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/images/bulletProjectile.png" />
+</p>
+
 
 #### Bullet Spamming Bug
-This worked and allowed the player to shoot projectiles. However, it introduced an unintended feature. The player could hit the spacebar as fast as they wanted to shoot rapidly. Part of the difficulty in Space Invaders is the rate of fire and the necessity to plan your shots as the enemies dwindle. To prevent the player from spamming, I implemented a coroutine that would call the shoot function. The time passed into WaitForSeconds() would simulate the fire rate with a simple boolean flag to check if the coroutine is active or not. In the code below, it is the isShooting variable
+The above implementation worked. However, it introduced an unintended feature. The player could hit the spacebar as fast as they wanted to shoot rapidly. Part of the difficulty in Space Invaders is the rate of fire and the necessity to plan your shots as the enemies dwindle. To prevent the player from spamming, I implemented a coroutine that would call the shoot function. The time passed into WaitForSeconds() would simulate the fire rate with a simple boolean flag to check if the coroutine is active or not. In the code below, it is the isShooting variable
 
 ```c#
-
+// In the Update Method 
 if (Input.GetKeyDown(KeyCode.Space) && !isShooting)
 {
     StartCoroutine(Shoot());
 }
 
+// Shoot function called when space is pressed and isShooting is false
 private IEnumerator Shoot()
 {
     isShooting = true;
@@ -120,6 +127,10 @@ private IEnumerator Shoot()
 ```
 If isShooting is true, don’t allow the player to shoot another projectile. Only when isShooting is false can the player shoot a projectile. 
 
+#### Communicating Early
+When I created the prefab for this projectile and added the physics layer / object tag, I saw all pre-existing physics layers in the project. After reading the project documentation, I realized the necessity for additional physics layers to be added so that the Space Invaders clone could behave in the same manner as its original. To be clear, this was before adding any enemies or shields into the game. I knew ahead of time that I would be detecting/ignoring collisions differently than what the current settings of the project allotted for. Specifically, I needed the player projectile to collide with the enemy projectile and the enemy while ignoring the player and the shield (allowing the player to strategically be positioned behind the shield and shoot through it). Simultaneously, I knew that the enemy projectile would need to collide with the shield, the player projectile, and the player while also ignoring the other enemies. At this point in development, I reached out to the project manager communicating the need for these additions to the project. Since I did this as soon as I noticed the need, proper additions were made to the project’s collision matrix resulting in zero slow downs to other developers or merge conflicts in pull requests. In fact, when I started working on the Environment / Enemy stories a couple days later. I was able to start and complete my deliverables without any delay. If I had said nothing and just waited until I encountered that problem within the story, I would have been at a roadblock, unable to continue development for at least 2 days
+
+Jump to see how smoothly the gameObject collisions went in the [enemy story]()
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
 
 ```c#
