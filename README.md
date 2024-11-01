@@ -9,7 +9,7 @@ Below are descriptions of the stories I worked on, along with code snippets and 
  * [Game Scenes](#game-scenes)
  * [Player Movement](#player-movement)
  * [Player Abilites](#player-abilities)
- * [Environment]()
+ * [Environment](#environment)
  * [Enemies](#enemies)
  * [Animations]()
  * [Player Death](#player-death)
@@ -125,10 +125,22 @@ private IEnumerator Shoot()
     isShooting = false;
 }
 ```
-If isShooting is true, don’t allow the player to shoot another projectile. Only when isShooting is false can the player shoot a projectile. 
+If isShooting is true, don’t allow the player to shoot another projectile. Only when isShooting is false can the player shoot a projectile. Now you can see below, the steady rate of fire, even though I was pressing the space bar as fast as I could. 
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerShooting.gif" />
+</p>
 
 #### Communicating Early
-When I created the prefab for this projectile and added the physics layer / object tag, I saw all pre-existing physics layers in the project. After reading the project documentation, I realized the necessity for additional physics layers to be added so that the Space Invaders clone could behave in the same manner as its original. To be clear, this was before adding any enemies or shields into the game. I knew ahead of time that I would be detecting/ignoring collisions differently than what the current settings of the project allotted for. Specifically, I needed the player projectile to collide with the enemy projectile and the enemy while ignoring the player and the shield (allowing the player to strategically be positioned behind the shield and shoot through it). Simultaneously, I knew that the enemy projectile would need to collide with the shield, the player projectile, and the player while also ignoring the other enemies. At this point in development, I reached out to the project manager communicating the need for these additions to the project. Since I did this as soon as I noticed the need, proper additions were made to the project’s collision matrix resulting in zero slow downs to other developers or merge conflicts in pull requests. In fact, when I started working on the Environment / Enemy stories a couple days later. I was able to start and complete my deliverables without any delay. If I had said nothing and just waited until I encountered that problem within the story, I would have been at a roadblock, unable to continue development for at least 2 days
+&emsp;When I created the prefab for this projectile and added the physics layer / object tag, I saw all pre-existing physics layers in the project. After reading the project documentation, I realized the necessity for additional physics layers to be added so that the Space Invaders clone could behave in the same manner as its original. To be clear, this was before adding any enemies or shields into the game. I knew ahead of time that I would be detecting/ignoring collisions differently than what the current settings of the project allotted for. Specifically, I needed the player projectile to collide with the enemy projectile and the enemy while ignoring the player and the shield (allowing the player to strategically be positioned behind the shield and shoot through it). Simultaneously, I knew that the enemy projectile would need to collide with the shield, the player projectile, and the player while also ignoring the other enemies.
+
+&emsp;At this point in development, I reached out to the project manager communicating the need for these additions to the project. Since I did this as soon as I noticed the need, proper additions were made to the project’s collision matrix resulting in zero slow downs to other developers or merge conflicts in pull requests. In fact, when I started working on the Environment / Enemy stories a couple days later. I was able to start and complete my deliverables without any delay. If I had said nothing and just waited until I encountered that problem within the story, I would have been at a roadblock, unable to continue development for at least 2 days
+
+
+Below is the newly editted collision matrix that I was permitted to make additions to. Notice how the "Shield", "Enemy Bullet", and "Player Bullet" have all been newly added on the left column with logic that is unique to any other previous layers.
+
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/images/collisionMatrix.png" />
+</p>
 
 Jump to see how smoothly the gameObject collisions went in the [enemy story]()
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
@@ -168,6 +180,50 @@ private void OnCollisionEnter2D(Collision2D collision)
         }
     }
 ```
+##
+
+### Environment
+
+#### Background
+&emsp;In this story I added two main features for the environment. The first was a background that scrolls to make it look like the player is moving through space. This is considered a parallax background where stacked images seem to “scroll endlessly” in the background. Through researching how this effect is achieved, I was able to write a script that takes a sprite image, moves it slowly, and resets the position every time it reaches a certain distance. By cleverly tracking its position and resetting it when it is divisible by its tiled height, the player doesn’t notice when the background image has reset.
+
+
+First I cached the reference to the sprite and calculated the amount of pixel in one unit of the sprite as seen below.
+
+```c#
+private void SetupTexture()
+{
+    Sprite sprite = GetComponent<SpriteRenderer>().sprite;
+    singleTextureHeight = sprite.texture.height / sprite.pixelsPerUnit;
+}
+```
+
+Then Scroll() is called in the Update method to move the image, followed by a check to see if it is ready to be reset.
+
+```c#
+private void Scroll()
+{
+    float delta = moveSpeed * Time.deltaTime;
+    transform.position += new Vector3(0f, delta, 0f);
+}
+
+private void CheckReset()
+{
+    if ((Mathf.Abs(transform.position.y) - singleTextureHeight) > 0)
+    {
+        transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+    }
+}
+```
+
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/movingBackground.gif" />
+</p>
+
+The reset you see above is actually the video recording reset! The reset of the background happens here without you noticing. Try [playing the game](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone) and see how seamless it is. 
+
+#### Shields
+The second feature I added was the shield to the environment.
 
 ### Player Death
 
