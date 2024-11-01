@@ -8,7 +8,7 @@ Below are descriptions of the stories I worked on, along with code snippets and 
 ## User Stories
  * [Game Scenes](#game-scenes)
  * [Player Movement](#player-movement)
- * [Player Abilites](#player-projectiles)
+ * [Player Abilites](#player-abilities)
  * [Environment]()
  * [Enemies](#enemies)
  * [Animations]()
@@ -95,7 +95,7 @@ With the addition of the two lines of code above, the player now gets instantly 
 
 ##
 
-### Player Projectiles 
+### Player Abilities
 
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
