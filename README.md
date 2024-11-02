@@ -1,8 +1,8 @@
 # Live Project
 ## Introduction
-During my time at the Tech Academy I joined a team of developers building a game in the Unity Engine for a 2 week sprint. This was an apprenticeship done for [Prosper IT Consulting](https://www.linkedin.com/company/prosper-it-consulting/) where I participated in Agile/Scrum practices by completing user stories (as well as sprint planning, daily stand-ups, sprint retrospective) to deliver a fully functional micro-game on time. I personally was tasked with creating a Space Invaders clone that would play in an arcade machine. I encountered numerous mechanics and features needing to be implemented that I knew nothing about. Not only did I successfully learn new material and deliver a completed product 3 days ahead of schedule, but I gained hands-on project management and team programming [skills](#other-skills-learned) that I know will be used and built upon in future projects.  
+&emsp;During my time at the Tech Academy I joined a team of developers building a game in the Unity Engine for a 2 week sprint. This was an apprenticeship done for [Prosper IT Consulting](https://www.linkedin.com/company/prosper-it-consulting/) where I participated in Agile/Scrum practices by completing user stories (as well as sprint planning, daily stand-ups, sprint retrospective) to deliver a fully functional micro-game on time. I personally was tasked with creating a Space Invaders clone that would play in an arcade machine. I encountered numerous mechanics and features needing to be implemented that I knew nothing about. Not only did I successfully learn new material and deliver a completed product 3 days ahead of schedule, but I gained hands-on project management and team programming [skills](#other-skills-learned) that I know will be used and built upon in future projects.  
 
-Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have full code files in this repo for the larger functionalities I implemented. If you would like to play the game, it has been published [here](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone).
+&emsp;Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have full code files in this repo for the larger functionalities I implemented. If you would like to play the game, it has been published [here](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone).
 
 
 ## User Stories
@@ -10,8 +10,8 @@ Below are descriptions of the stories I worked on, along with code snippets and 
  * [Player Movement](#player-movement)
  * [Player Abilites](#player-abilities)
  * [Environment](#environment)
- * [Enemies](#enemies)
  * [Animations](#animations)
+ * [Enemies](#enemies)
  * [Player Death](#player-death)
  * [New Level](#new-level)
  * [Game Over](#game-over)
@@ -147,41 +147,6 @@ Below is the newly editted collision matrix that I was permitted to make additio
 Jump to see how smoothly the gameObject collisions went in the [enemy story]()
 
 
-```c#
-
-private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.CompareTag("EnemyBullet"))
-        {
-            Destroy(collision.gameObject);
-            health--;
-
-            if(health <= 0)
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                sRenderer.sprite = states[health - 1];
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(collision.gameObject);
-            health--;
-
-            if (health <= 0)
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                sRenderer.sprite = states[health - 1];
-            }
-        }
-    }
-```
 ##
 
 ### Environment
@@ -219,13 +184,73 @@ private void CheckReset()
 ```
 
 <p align=center>
-    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/movingBackground.gif" />
-</p>
-
-The reset you see above is actually the video recording reset! The reset of the background happens here without you noticing. Try [playing the game](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone) and see how seamless it is. 
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/movingBackground.gif" /></p>
+    
+###### <p align="center"> The reset you see above is actually the video recording reset!<br/> The reset of the background happens here without you noticing.<br/> Try [playing the game](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone) to see how seamless it is.</p><br/>
 
 <!--### <p align="center">2.)Shields</p>-->
-The second feature I added was the shield to the environment.
+&emsp;The second part of this story was creating the shields that the player can take cover behind and effectively shoot through. However, when the shield takes damage from an enemy projectile, it needs to show a damaged state. To achieve this effect I created a script that holds an array of sprites. Each element in the array represents a different health state. Then when the correct collision happens, set the sprite renderer to the next element in the array. 
+
+&emsp;In the code below, the shield object checks if the collision is from an enemy projectile. If it is, then destroy the projectile and decrement the health of the shield. After decrementing, check to see if the shield needs to be destroyed or changed to a different sprite. 
+
+```c#
+private void OnCollisionEnter2D(Collision2D collision)
+{
+    if(collision.gameObject.CompareTag("EnemyBullet"))
+    {
+        Destroy(collision.gameObject);
+        health--;
+
+            if(health <= 0)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                sRenderer.sprite = states[health - 1];
+            }
+    }
+}
+```
+#### Shield Error
+&emsp;Unfortunately, the way that I initially implemented this shield would cause a game crash later on in development. I needed to come back to this script when I encountered a null reference exception from attempting to reset the health of the shield for a new wave. Since I called Destroy(gameObject) on the shield whenever the health reached zero, I could no longer access it inside of the game manager script when I needed to reset its health because it didn’t exist.
+
+&emsp;To solve this problem, I changed one line of code from above, to what you now see below. The .setActive() method changes the active state of the game object to false instead of destroying it. Therefore, the shield still exists when its health reaches zero and is simply invisible to the player. This fixed the issue and the game no longer crashed when attempting to load a new wave.
+
+```c#
+if(health <= 0)
+{
+    gameObject.SetActive(false);
+}
+
+```
+See it's implementation here
+*Jump to: [top](#live-project)*
+
+##
+
+### Animations
+
+&emsp;In this story I created and became quite efficient with the workflow for 2D animations. From importing, splicing, and editing sprites, to creating animation controllers and sequences. I built and tweaked the animations for the enemies to better match the speed of the original Space Invaders game. 
+
+#### Explosion Particle Bug 
+&emsp;One issue I ran into when creating the animations was the explosion particle. Since I was attempting to instantiate the explosion particle as a game object at the location an enemy died, the last frame of the explosion would stay on the screen permanently. I needed to destroy the particle, but only after the animation had fully played once. I researched and referenced Unity’s documentation for solutions and found animation events. To solve this issue I implemented an animation event *(seen below)* on the last frame to call a function that would destroy itself.
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/images/animationEvent.png" /></p>
+    
+&emsp;This ensured all responsibilities for the explosion particle’s existence were self contained by accessing its own kill method *(seen below)* to remove itself from the game after playing its animation. This was a quick and simple fix for the implementation I chose to do.  
+
+```c#
+public class space_inv_explosion : MonoBehaviour
+{
+     public void Kill()
+    {
+        Destroy(gameObject);
+    }
+}
+```
+
+
 *Jump to: [top](#live-project)*
 
 ##
@@ -235,12 +260,6 @@ The second feature I added was the shield to the environment.
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
-
-*Jump to: [top](#live-project)*
-
-##
-
-### Animations
 
 *Jump to: [top](#live-project)*
 
