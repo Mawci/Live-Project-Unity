@@ -2,8 +2,7 @@
 ## Introduction
 &emsp;During my time at the Tech Academy I joined a team of developers building a game in the Unity Engine for a 2 week sprint. This was an apprenticeship done for [Prosper IT Consulting](https://www.linkedin.com/company/prosper-it-consulting/) where I participated in Agile/Scrum practices by completing user stories (as well as sprint planning, daily stand-ups, sprint retrospective) to deliver a fully functional micro-game on time. I personally was tasked with creating a Space Invaders clone that would play in an arcade machine. I encountered numerous mechanics and features needing to be implemented that I knew nothing about. Not only did I successfully learn new material and deliver a completed product 3 days ahead of schedule, but I gained hands-on project management and team programming [skills](#other-skills-learned) that I know will be used and built upon in future projects.  
 
-&emsp;Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have full code files in this repo for the larger functionalities I implemented. If you would like to play the game, it has been published [here](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone).
-
+&emsp;Below are descriptions of the stories I worked on, along with code snippets, gifs, and navigation links. I also have full code files in this repo for the larger functionalities I implemented. If you would like to play the game, it has been published [here](https://play.unity.com/en/games/1e29f742-4101-4814-abab-023970facbcd/space-invaders-clone).
 
 ## User Stories
  * [Game Scenes](#game-scenes)
@@ -12,10 +11,10 @@
  * [Environment](#environment)
  * [Animations](#animations)
  * [Enemies](#enemies)
- * [Player Death](#player-death)
  * [New Level](#new-level)
  * [Game Over](#game-over)
  * [Skills](#other-skills-learned)
+   <!--* [Player Death](#player-death)-->
 ##
 
 ### Game Scenes
@@ -55,6 +54,7 @@ public class MenuScript : MonoBehaviour
     }
 }
 ```
+*Jump To: [Page Top](#introduction), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level), [Game Over](#game-over), [Skills](#other-skills-learned)*
 ##
 
 ### Player Movement
@@ -93,7 +93,7 @@ With the addition of the two lines of code above, the player now gets instantly 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif)
 -->
 
-*Jump to: [top](#live-project)*
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level), [Game Over](#game-over), [Skills](#other-skills-learned)*
 
 ##
 
@@ -144,9 +144,7 @@ Below is the newly editted collision matrix that I was permitted to make additio
     <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/images/collisionMatrix.png" />
 </p>
 
-Jump to see how smoothly the gameObject collisions went in the [enemy story]()
-
-
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level), [Game Over](#game-over), [Skills](#other-skills-learned)*
 ##
 
 ### Environment
@@ -212,10 +210,15 @@ private void OnCollisionEnter2D(Collision2D collision)
     }
 }
 ```
+
+As you can see in the gif below from the completed game, the player is able to shoot through the shield and the shield changes its sprite only when hit by an enemy projectile.
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif" /></p>
+
 #### Shield Error
 &emsp;Unfortunately, the way that I initially implemented this shield would cause a game crash later on in development. I needed to come back to this script when I encountered a null reference exception from attempting to reset the health of the shield for a new wave. Since I called Destroy(gameObject) on the shield whenever the health reached zero, I could no longer access it inside of the game manager script when I needed to reset its health because it didn’t exist.
 
-&emsp;To solve this problem, I changed one line of code from above, to what you now see below. The .setActive() method changes the active state of the game object to false instead of destroying it. Therefore, the shield still exists when its health reaches zero and is simply invisible to the player. This fixed the issue and the game no longer crashed when attempting to load a new wave.
+&emsp;To solve this problem, I changed one line of code from above, to what you now see below. The .SetActive() method changes the active state of the game object to false instead of destroying it. Therefore, the shield still exists when its health reaches zero and is simply invisible to the player. This fixed the issue and the game no longer crashed when attempting to load a new wave.
 
 ```c#
 if(health <= 0)
@@ -224,8 +227,9 @@ if(health <= 0)
 }
 
 ```
-See it's implementation here
-*Jump to: [top](#live-project)*
+
+
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Enemies](#enemies), [New Level](#new-level), [Game Over](#game-over), [Skills](#other-skills-learned)*
 
 ##
 
@@ -251,32 +255,106 @@ public class space_inv_explosion : MonoBehaviour
 ```
 
 
-*Jump to: [top](#live-project)*
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [New Level](#new-level), [Game Over](#game-over), [Skills](#other-skills-learned)*
 
 ##
 
 ### Enemies
-//talk about faster enemies
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif)
 
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/ezgif.com-video-to-gif-converter.gif)
+&emsp;This was arguably the most difficult challenge I faced as I needed to move the entire wave of enemies at a set interval while still keeping track of the total number of enemies remaining on screen that would proportionally increase their speed. To tackle this problem, I made 2 scripts. One to hold a list of all the enemies so that they could be moved as a whole, and the other would reside on the enemy to be responsible for destroying and removing itself from the list. 
 
-*Jump to: [top](#live-project)*
+In the wave script, I start by adding each object in the scene with the tag of “enemy” to the list.
+
+```c#
+void Start()
+{
+    foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            alienWave.Add(enemy);
+        }
+}
+```
+Then, by keeping track and updating a float variable called "moveTimer" within the Update() function, I call a function named MoveEnemies() to loop through and move each enemy a set distance. By playtesting and tweaking this timer, you get a feeling of the enemies moving in "steps." 
+
+```c#
+void Update()
+{
+    if (moveTimer <= 0)
+    {
+         MoveEnemies();
+    }
+
+moveTimer -= Time.deltaTime;
+}
+
+ private void MoveEnemies()
+    {
+        if(alienWave.Count > 0)
+        {
+            //max is the varaible to check if the left or right bounds was touched
+            int max = 0;
+            for (int i = 0; i < alienWave.Count; i++)
+            {
+                
+                if(movingRight)
+                {
+                    alienWave[i].transform.position += horizontalDistance;
+                }
+                else
+                {
+                    alienWave[i].transform.position -= horizontalDistance;
+                }
+
+                if(alienWave[i].transform.position.x > maxRight || alienWave[i].transform.position.x < maxLeft)
+                {
+                    max++;
+                }
+            }
+
+            if (max > 0)
+            {
+                for (int i = 0; i < alienWave.Count; i++)
+                {
+                    alienWave[i].transform.position -= verticalDistance;
+                }
+
+                movingRight = !movingRight;
+            }
+
+            moveTimer = GetMoveSpeed();
+        }
+    }
+```
+&emsp;Above you can see the bool flag named "movingRight" to tell what direction the enemies should move. I combined this with a check after each move to see if the enemy wave hit the bounds of the screen called "max." If max was a value greater than 0, meaning the bounds of the screen were hit, then the enemies were moved down, changed directions, and max reset. After all movemement was complete, I called the GetMoveSpeed() function *(defined below)* to change the speed of the enemies based on the amount remaining. 
+
+```c#
+private float GetMoveSpeed()
+{
+    float time = alienWave.Count * moveTime;
+    return time;
+}
+```
+This gives the intended result of what you see below. When then number of enemies decrease, so does the time between each move interval.
+
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif" /></p>
+
+
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Game Over](#game-over), [Skills](#other-skills-learned)*
 
 ##
-
+<!--
 ### Player Death
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerDeath-video-to-gif-converter.gif)
 *Jump to: [top](#live-project)*
 
 ##
-
+-->
 ### New Level
 //new wave
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/newWaveSpawn.gif)
 
-called by the gameManager function on new wave load// talk about the reason for choosing setActive over destroy object
  ```c#
 
 private void ResetBarriers()
@@ -298,7 +376,7 @@ public void ResetHealth()
         sRenderer.sprite = states[health - 1];
     }
 ```
-
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [Skills](#other-skills-learned)*
 ##
 
 ### Game Over
@@ -306,7 +384,7 @@ public void ResetHealth()
 
 ![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/gameOver.gif)
 
-
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level)*
 ## Other Skills Learned
 
 * Gained practical experience working as part of a team in a Scrum environment by attending daily , sprint planning, sprint retrospective, and daily stand-up meetings.
@@ -319,4 +397,4 @@ public void ResetHealth()
   * [Parallax Background](#environment)
 * Experience with encountering errors / bugs and stepping through them to discover the issue. Then creatively thinking through solutions to implement fixes.
 
-*Jump to: [top](#live-project)*
+*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level)*
