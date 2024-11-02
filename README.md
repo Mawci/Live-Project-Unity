@@ -84,7 +84,7 @@ if (transform.position.x > maxRight)
     transform.position = new Vector2(maxRight, transform.position.y);
 }
 ```
-With the addition of the two lines of code above, the player now gets instantly micro-adjusted to be within the screen bounds. As you can see below, seemlessly resulting in an "invisible barrier" feel.
+With the addition of the two lines of code above, the player now gets instantly micro-adjusted to be within the screen bounds. As you can see below, seemingly resulting in an "invisible barrier" feel.
 
 <p align=center>
 <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/playerMovement.gif" />
