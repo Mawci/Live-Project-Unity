@@ -389,32 +389,32 @@ I then made a coroutine that will wait 2 seconds before spawning in a new wave t
 
 ```c#
 public static void SpawnNewWave()
-    {
-        instance.StartCoroutine(instance.SpawnWave());
-    }
+{
+   instance.StartCoroutine(instance.SpawnWave());
+}
 
-    private IEnumerator SpawnWave()
-    {
-        if(currentSet != null)
-        {
-            Destroy(currentSet);
-        }
+private IEnumerator SpawnWave()
+{
+   if(currentSet != null)
+   {
+      Destroy(currentSet);
+   }
 
-        yield return new WaitForSeconds(2);
+   yield return new WaitForSeconds(2);
 
-        currentSet = Instantiate(alienWaveSet[UnityEngine.Random.Range(0, alienWaveSet.Length)], spawnPosition, Quaternion.identity);
-        space_inv_HUD.UpdateWave();
+   currentSet = Instantiate(alienWaveSet[UnityEngine.Random.Range(0, alienWaveSet.Length)], spawnPosition, Quaternion.identity);
+   space_inv_HUD.UpdateWave();
 
-        if(firstWave)
-        {
-            firstWave = false;
-        }
-        else
-        {
-            ResetBarriers();
-            ChangeBackground();
-        }
-    }
+   if(firstWave)
+   {
+      firstWave = false;
+   }
+   else
+   {
+      ResetBarriers();
+      ChangeBackground();
+   }
+}
 ```
 The boolean flag "firstWave" above checks to see if the level needs to reload the barriers or change the background. After the initial wave, every call to the method will reset the all the shields health and change the background. Those methods are defined below. 
 
