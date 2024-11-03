@@ -284,7 +284,7 @@ void Update()
          MoveEnemies();
     }
 
-moveTimer -= Time.deltaTime;
+   moveTimer -= Time.deltaTime;
 }
 
  private void MoveEnemies()
@@ -334,11 +334,25 @@ private float GetMoveSpeed()
     return time;
 }
 ```
-This gives the intended result of what you see below. When then number of enemies decrease, so does the time between each move interval.
+This gives the intended result of what you see below. When the number of enemies decrease, so does the time between each move interval.
 
 <p align=center>
     <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/fasterEnemies.gif" /></p>
 
+#### Enemy Wave Error
+
+&emsp;Through thorough playtesting later in development, I discovered a crash that would occur with the wave script when the player attempted to play again. I came back to this script to debug it and found a situation that could occur where enemies are added to the list that's not empty. This scenario specifically occurs when a player dies in a previous game and launches another. All the enemies from the previous game stay in the list and the new game enemies are added to it. Then when the wave script attempts to move the enemies, it crashes because the enemies from the previous game no longer exist. By stepping through the problem to see why the error was happening, I was able to add a simple line of code *(seen below)* to clear the list of enemies to always ensure an empty list on a new game. 
+
+```c#
+void Start()
+    {
+        alienWave.Clear();
+        foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            alienWave.Add(enemy);
+        }
+    }
+```
 
 *Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Game Over](#game-over), [Skills](#other-skills-learned)*
 
@@ -352,11 +366,59 @@ This gives the intended result of what you see below. When then number of enemie
 ##
 -->
 ### New Level
-//new wave
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/newWaveSpawn.gif)
 
- ```c#
+&emsp;In this story I was responsible for adding additional levels to the game. To accomplish this, I added a game manager script with a method to load a new wave of enemies. Going into this, I knew I wanted other scripts in the game to have access to the functions in the game manager such as an ability to spawn a new wave, update the UI, or reset the health of the barriers. Therefore I made use of the singleton pattern.
 
+
+```c#
+private static space_inv_game_manager instance;
+private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+```
+
+I then made a coroutine that will wait 2 seconds before spawning in a new wave that randomly instantiates an enemy wave prefab which allows for different arrangements of enemies as the player progresses through the game.
+
+```c#
+public static void SpawnNewWave()
+    {
+        instance.StartCoroutine(instance.SpawnWave());
+    }
+
+    private IEnumerator SpawnWave()
+    {
+        if(currentSet != null)
+        {
+            Destroy(currentSet);
+        }
+
+        yield return new WaitForSeconds(2);
+
+        currentSet = Instantiate(alienWaveSet[UnityEngine.Random.Range(0, alienWaveSet.Length)], spawnPosition, Quaternion.identity);
+        space_inv_HUD.UpdateWave();
+
+        if(firstWave)
+        {
+            firstWave = false;
+        }
+        else
+        {
+            ResetBarriers();
+            ChangeBackground();
+        }
+    }
+```
+The boolean flag "firstWave" above checks to see if the level needs to reload the barriers or change the background. After the initial wave, every call to the method will reset the all the shields health and change the background. Those methods are defined below. 
+
+```c#
 private void ResetBarriers()
     {
         for (int i = 0; i < barriers.Length; i++)
@@ -366,35 +428,69 @@ private void ResetBarriers()
         }
     }
 
-```
-
-the reset barrier function then calls the public function for each one
-```c#
-public void ResetHealth()
+    private void ChangeBackground()
     {
-        health = 4;
-        sRenderer.sprite = states[health - 1];
+        backgroundPlanets.GetComponent<space_inv_background_controller>().ChangeBackgroundPlanets();
+        backgroundStars.GetComponent<space_inv_background_controller>().ChangeBackgroundStars();
     }
 ```
+&emsp;Coincidently, this is where I ran into the error with the [shield](#shield-error) and had to spend time debugging. Now properly fixed, you can see how the game manager spawns in a new wave when the last enemy is defeated, the shields are set back to full health, the background is changed, and the wave number in the upper right corner is updated. 
+
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/newWaveSpawn.gif" /></p>
+
+
 *Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [Skills](#other-skills-learned)*
 ##
 
 ### Game Over
-//with persistent data
 
-![](https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/gameOver.gif)
+&emsp;In this story I needed to trigger a game over whenever the player would lose their last life. To do this, I simply added a check in the player script to see if the player lives were equal to zero. If they were equal to zero, load the game over scene.
+```c#
+if(playerStats.currentLives == 0)
+{
+   playerScore.UpdateScore(space_inv_HUD.GetScore());
+   playerScore.UpdateWave(space_inv_HUD.GetWave());
+   menu.GameOver();
+}
+```
+&emsp;The problem with this, however, is that the score and wave number would not persist to the game over screen. The player wouldn’t see how many points they accumulated or waves survived because the player score script creates a new instance on scene load. To properly achieve score that persists across scenes, I referenced Unity’s documentation to effectively implement the “DontDestoryOnLoad()” method. You can see how I added it to the player score script below. 
 
-*Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level)*
+```c#
+private void Awake()
+{
+   int numScoreSessions = FindObjectsOfType<space_inv_score>().Length;
+   if(numScoreSessions > 1)
+   {
+      Destroy(gameObject);
+   }
+   else
+   {
+   DontDestroyOnLoad(gameObject);
+   }
+}
+```
+Now with this added, the score will persist onto the game over scene to show how many wave were survived with their total points.
+
+<p align=center>
+    <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/gameOver.gif" /></p>
+
 ## Other Skills Learned
 
-* Gained practical experience working as part of a team in a Scrum environment by attending daily , sprint planning, sprint retrospective, and daily stand-up meetings.
-* Proven ability to integrate smoothly into ongoing development by adapting to custom naming conventions and workflows for checking out stories and creating pull requests in Azure DevOps.
+* Gained practical experience working as part of a team in a Scrum environment by attending sprint planning, sprint retrospective, and daily stand-up meetings.
+* Proven ability to integrate smoothly into ongoing development by adapting to custom naming conventions and workflows for checking out stories, creating pull requests in Azure DevOps, and committing code with Git version control.
 * Experience with seeing problems before they arise and [communicating](#communicating-early) them to the project manager immediately that resulted with no downtime to other developers or merge conflicts to the master branch.
 * Communication with team members and assisting in problem solving. During a standup meeting I heard a fellow developer was having difficulty with the detection of 2D collisions and I was able to offer constructive solutions for troubleshooting.
 * Ability to research and learn material that I am unfamiliar with. Several examples throughout this project where I needed to reference the Unity documentation to successfully implement features.
-  * (Animation events)
-  * New [Font Assets](#game-scenes)
+  * [Animation events](#explosion-particle-bug)
+  * [New Font Assets](#game-scenes)
   * [Parallax Background](#environment)
-* Experience with encountering errors / bugs and stepping through them to discover the issue. Then creatively thinking through solutions to implement fixes.
+  * [Persistent Data](#game-over)
+* Experience with encountering errors / bugs and stepping through them to discover the issue. Then working through solutions to implement fixes.
+  * [Input Bug](#movement-bug)
+  * [Bullet Spamming](#bullet-spamming-bug)
+  * [Shield Error](#shield-error)
+  * [Explosion Particle](#explosion-particle-bug)
+  * [Wave Error](#enemy-wave-error)
 
 *Jump To: [Page Top](#introduction), [Game Scenes](#game-scenes), [Player Movement](#player-movement), [Player Abilites](#player-abilities), [Environment](#environment), [Animations](#animations), [Enemies](#enemies), [New Level](#new-level)*
