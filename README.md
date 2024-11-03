@@ -477,16 +477,16 @@ Now with this added, the score will persist onto the game over scene to show how
 
 ## Other Skills Learned
 
-* Gained practical experience working as part of a team in a Scrum environment by attending sprint planning, sprint retrospective, and daily stand-up meetings.
-* Proven ability to integrate smoothly into ongoing development by adapting to custom naming conventions and workflows for checking out stories, creating pull requests in Azure DevOps, and committing code with Git version control.
-* Experience with seeing problems before they arise and [communicating](#communicating-early) them to the project manager immediately that resulted with no downtime to other developers or merge conflicts to the master branch.
-* Communication with team members and assisting in problem solving. During a standup meeting I heard a fellow developer was having difficulty with the detection of 2D collisions and I was able to offer constructive solutions for troubleshooting.
+* Gained practical experience collaborating with a team of developers in a Scrum environment, participating in sprint planning, retrospectives, and daily stand-ups to enhance project efficiency.
+* Demonstrated adaptability by seamlessly integrating into ongoing development, quickly mastering custom naming conventions and workflows for Azure DevOps, and utilizing Git for version control.
+* Proactively identified potential issues before they escalated, [communicating](#communicating-early) effectively with the project manager to prevent downtime and ensure smooth development processes.
+* Actively communicated with team members, providing support in problem-solving during stand-up meetings. For example, I assisted a fellow developer in troubleshooting 2D collision detection, resulting in a faster resolution.
 * Ability to research and learn material that I am unfamiliar with. Several examples throughout this project where I needed to reference the Unity documentation to successfully implement features.
   * [Animation events](#explosion-particle-bug)
   * [New Font Assets](#game-scenes)
   * [Parallax Background](#environment)
   * [Persistent Data](#game-over)
-* Experience with encountering errors / bugs and stepping through them to discover the issue. Then working through solutions to implement fixes.
+* Gained hands-on experience in debugging by systematically identifying and resolving errors, fostering a deeper understanding of the development process and enhancing my problem-solving abilities.
   * [Input Bug](#movement-bug)
   * [Bullet Spamming](#bullet-spamming-bug)
   * [Shield Error](#shield-error)
