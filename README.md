@@ -470,7 +470,7 @@ private void Awake()
    }
 }
 ```
-Now with this added, the score will persist onto the game over scene to show how many wave were survived with their total points.
+Now with this added, the score will persist onto the game over scene to show how many waves were survived with their total points.
 
 <p align=center>
     <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/Gifs/gameOver.gif" /></p>
