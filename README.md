@@ -59,7 +59,7 @@ public class MenuScript : MonoBehaviour
 
 ### Player Movement
 
-&emsp;This story was seemingly simple as the movement in Space Invaders is not too complex, however I still ran into a bug that I needed to carefully step through. Initially, I used transform.Translate() to move the player using its horizontal vector multipied by a constant speed. This worked, but I needed a way to ensure the player stayed within the viewable bounds of the screen. To solve this, I created two variables that would hold the maximum position on the right and left sides of the screen before going out of view. Then I did a simple check to see if the player was within those two values. If they were, then allow input to move the player.
+&emsp;This story was seemingly simple as the movement in Space Invaders is not too complex, however I still ran into a bug that I needed to carefully step through. Initially, I used transform.Translate() to move the player using its horizontal vector multiplied by a constant speed. This worked, but I needed a way to ensure the player stayed within the viewable bounds of the screen. To solve this, I created two variables that would hold the maximum position on the right and left sides of the screen before going out of view. Then I did a simple check to see if the player was within those two values. If they were, then allow input to move the player.
 <br/> <br/>
 
 ```c#
@@ -138,7 +138,7 @@ private IEnumerator Shoot()
 &emsp;At this point in development, I reached out to the project manager communicating the need for these additions to the project. Since I did this as soon as I noticed the need, proper additions were made to the project’s collision matrix resulting in zero slow downs to other developers or merge conflicts in pull requests. In fact, when I started working on the Environment / Enemy stories a couple days later. I was able to start and complete my deliverables without any delay. If I had said nothing and just waited until I encountered that problem within the story, I would have been at a roadblock, unable to continue development for at least 2 days
 
 
-&emsp;Below is the newly editted collision matrix that I was permitted to make additions to. Notice how the "Shield", "Enemy Bullet", and "Player Bullet" have all been newly added on the left column with logic that is unique to any other previous layers.
+&emsp;Below is the newly edited collision matrix that I was permitted to make additions to. Notice how the "Shield", "Enemy Bullet", and "Player Bullet" have all been newly added on the left column with logic that is unique to any other previous layers.
 
 <p align=center>
     <img src="https://github.com/Mawci/Live-Project-Unity/blob/main/images/collisionMatrix.png" />
@@ -325,7 +325,7 @@ void Update()
         }
     }
 ```
-&emsp;Above you can see the bool flag named "movingRight" to tell what direction the enemies should move. I combined this with a check after each move to see if the enemy wave hit the bounds of the screen called "max." If max was a value greater than 0, meaning the bounds of the screen were hit, then the enemies were moved down, changed directions, and max reset. After all movemement was complete, I called the GetMoveSpeed() function *(defined below)* to change the speed of the enemies based on the amount remaining. 
+&emsp;Above you can see the bool flag named "movingRight" to tell what direction the enemies should move. I combined this with a check after each move to see if the enemy wave hit the bounds of the screen called "max." If max was a value greater than 0, meaning the bounds of the screen were hit, then the enemies were moved down, changed directions, and max reset. After all movemment was complete, I called the GetMoveSpeed() function *(defined below)* to change the speed of the enemies based on the amount remaining. 
 
 ```c#
 private float GetMoveSpeed()
