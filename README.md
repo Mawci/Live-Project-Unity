@@ -416,7 +416,7 @@ private IEnumerator SpawnWave()
    }
 }
 ```
-The boolean flag "firstWave" above checks to see if the level needs to reload the barriers or change the background. After the initial wave, every call to the method will reset the all the shields health and change the background. Those methods are defined below. 
+The boolean flag "firstWave" above checks to see if the level needs to reload the barriers or change the background. After the initial wave, every call to the method will reset all the shields health and change the background. Those methods are defined below. 
 
 ```c#
 private void ResetBarriers()
